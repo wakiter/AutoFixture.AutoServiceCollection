@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,7 +46,41 @@ namespace AutoFixture.AutoServiceCollection.Tests
 
             actualBFromServiceProvider.Should().BeSameAs(b);
 
-            actualOne.InterfaceObj.GetType().FullName.Should().Be("Castle.Proxies.ObjectProxy");
+            actualOne.InterfaceObj.GetType().FullName.Should().StartWithEquivalentOf("Castle.Proxies.ObjectProxy");
+        }
+
+        [Fact]
+        public void It_removes_previous_instances_of_this_customisation()
+        {
+            var previousCustomisation = _sut.Customizations.First(x => x is ServiceCollectionConnector);
+
+            _sut.Customize(new AutoServiceCollectionCustomization());
+
+            _sut.Customizations.Should().Contain(x => x is ServiceCollectionConnector);
+            _sut.Customizations.Should().NotContain(previousCustomisation);
+        }
+
+        [Fact]
+        public void It_throws_an_exception_when_fixture_passed_is_null()
+        {
+            var customisation = new AutoServiceCollectionCustomization();
+            Action act = () => customisation.Customize(null);
+
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void It_does_nothing_when_customised_previously()
+        {
+            var customisation = new AutoServiceCollectionCustomization();
+            var sut = new Fixture();
+            sut.Customize(customisation);
+
+            var customisationsBeforeSecondInvocation = sut.Customizations.ToArray();
+
+            customisation.Customize(sut);
+
+            sut.Customizations.Should().BeEquivalentTo(customisationsBeforeSecondInvocation);
         }
     }
 
