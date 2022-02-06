@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>AutoFixture.AutoServiceCollection</PackageId>
+    <PackageId>wakiter.AutoFixture.AutoServiceCollection</PackageId>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/wakiter/AutoFixture.AutoServiceCollection</RepositoryUrl>
   </PropertyGroup>
