@@ -25,7 +25,7 @@ public class MyClass
 [Fact]
 public void IntroductoryTest()
 {
-    Fixture fixture = new Fixture().Customize(new AutoServiceCollectionCustomization());
+	Fixture fixture = new Fixture().Customize(new AutoServiceCollectionCustomization());
 	var serviceCollection = fixture.Freeze<IServiceCollection>(); //it may be as well fixture.Create<IServiceCollection>()
 	
 	serviceCollection.AddSingleton(sp => new SingletonClass());
